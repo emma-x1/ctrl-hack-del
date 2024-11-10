@@ -4,8 +4,10 @@ import '../globals.css';
 
 const Page: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isCameraVisible, setIsCameraVisible] = useState(true);
   const [fadeOut, setFadeOut] = useState(false);
+  const [barcodeNumber, setBarcodeNumber] = useState<string | null>(null);
 
   useEffect(() => {
     const startCamera = async () => {
@@ -30,11 +32,24 @@ const Page: React.FC = () => {
     };
   }, []);
 
-  const captureImage = () => {
+  const captureImage = async () => {
     setFadeOut(true);
 
-    setTimeout(() => {
-      if (videoRef.current && videoRef.current.srcObject) {
+    setTimeout(async () => {
+      if (videoRef.current && canvasRef.current) {
+        // Capture image from video feed
+        const context = canvasRef.current.getContext('2d');
+        canvasRef.current.width = videoRef.current.videoWidth;
+        canvasRef.current.height = videoRef.current.videoHeight;
+        context?.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
+
+        // Convert captured image to base64
+        const dataUrl = canvasRef.current.toDataURL('image/jpeg');
+
+        // Send to API
+        await sendToAPI(dataUrl);
+
+        // Stop the video stream
         const stream = videoRef.current.srcObject as MediaStream;
         const tracks = stream.getTracks();
         tracks.forEach((track) => track.stop());
@@ -44,12 +59,36 @@ const Page: React.FC = () => {
     }, 1000);
   };
 
+  const sendToAPI = async (base64Image: string) => {
+    try {
+      const response = await fetch('/api/getNumber', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ photo: base64Image }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`API responded with status ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (data.success) {
+        setBarcodeNumber(data.num); // Update the barcode number in the state
+      } else {
+        console.error("Failed to interpret barcode:", data.failedReason);
+      }
+    } catch (error) {
+      console.error("Error calling the interpret barcode API:", error);
+    }
+  };
+
   return (
     <div className="page-container">
       {/* Conditionally render the camera and fade-out effect */}
       {isCameraVisible && (
         <div className={`video-wrapper ${fadeOut ? 'fade-out' : ''}`}>
           <video ref={videoRef} autoPlay playsInline className="video" />
+          <canvas ref={canvasRef} style={{ display: 'none' }} />
           <button onClick={captureImage} className="capture-button">
             Capture Image
           </button>
@@ -83,6 +122,14 @@ const Page: React.FC = () => {
                 <li><a href="#source2">Source 2</a></li>
               </ul>
             </div>
+
+            {/* Display Barcode Number */}
+            {barcodeNumber && (
+              <div className="barcode-number">
+                <h3>Barcode Number:</h3>
+                <p>{barcodeNumber}</p>
+              </div>
+            )}
           </div>
         </>
       )}
