@@ -65,7 +65,7 @@ body {
 
 /* Company Name Styling - Big and Centered */
 .company-name {
-  font-size: 4rem; /* Larger font size */
+  font-size: 4rem;
   font-weight: bold;
   color: #ffffff;
   text-align: center;
@@ -73,7 +73,7 @@ body {
   position: absolute;
   top: 50%; /* Center vertically */
   left: 50%; /* Center horizontally */
-  transform: translate(-50%, -50%); /* Adjust to exact center */
+  transform: translate(-50%, -50%);
 }
 
 .company-name.visible {
@@ -131,7 +131,7 @@ body {
 }
 
 /* Sustainability News (Top Right) */
-.sustainability-news {
+/*.sustainability-news {
   position: absolute;
   top: 60px;
   right: 60px;
@@ -145,7 +145,7 @@ body {
 }
 
 /* Sources (Bottom Right) */
-.sources {
+/*.sources {
   position: absolute;
   bottom: 60px;
   right: 60px;
@@ -176,8 +176,9 @@ body {
 .sources ul li a:hover {
   text-decoration: underline;
 }
+*/
 
-/* Improved Brand and Title Display */
+/* Brand and Title Display - Wrapping */
 .brand-info {
   display: flex;
   flex-direction: column;
