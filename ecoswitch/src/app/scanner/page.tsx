@@ -108,6 +108,7 @@ const Page: React.FC = () => {
         setBrand(data.answer);
         setTitle(data.title);
         await fetchImage(data.title);
+        await fetchImage(data.alt);
       } else {
         console.error(`Failed to interpret barcode: ${barcode}`, data.failedReason);
       }
@@ -121,7 +122,7 @@ const Page: React.FC = () => {
     try {
       const subscriptionKey = process.env.NEXT_PUBLIC_BING_API_KEY;
       if (!subscriptionKey) {
-        throw new Error('The OPENAI_API_KEY environment variable is missing.');
+        throw new Error('The BING_API_KEY environment variable is missing.');
       }
       const endpoint = 'https://api.bing.microsoft.com/v7.0/images/search';
 
