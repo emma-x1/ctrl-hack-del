@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import Modal from "@/components/Modal";
+import './main.css';
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);

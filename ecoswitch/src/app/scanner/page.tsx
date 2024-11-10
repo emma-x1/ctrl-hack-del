@@ -15,9 +15,11 @@ const Page: React.FC = () => {
   const [sustainabilityGrade, setSustainabilityGrade] = useState("A");
   const [isLoading, setIsLoading] = useState(false);
   const [isSlotMachineActive, setIsSlotMachineActive] = useState(false);
-  const [imageUrl, setImageUrl] = useState<string>(''); // New state variable for image URL
-  const [error, setError] = useState<string>(''); // New state variable for errors
-  
+  const [imageUrl, setImageUrl] = useState<string>('');
+  const [summary1, setSummary1] = useState<string | null>(null); // State for the sustainability summary
+  const [summary2, setSummary2] = useState<string | null>(null);
+  const [summary3, setSummary3] = useState<string | null>(null);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
     const startCamera = async () => {
@@ -47,7 +49,7 @@ const Page: React.FC = () => {
     element?.classList.remove("invisible");
     element?.classList.add("fade-in");
     setFadeOut(true);
-    setIsLoading(true); // Show loading screen immediately after capture
+    setIsLoading(true);
 
     setTimeout(async () => {
       if (videoRef.current && canvasRef.current) {
@@ -105,10 +107,12 @@ const Page: React.FC = () => {
 
       const data = await response.json();
       if (data.success) {
-        setBrand(data.answer);
+        const brand = data.answer;
         setTitle(data.title);
         await fetchImage(data.title);
-        await fetchImage(data.alt);
+        await fetchBrandSummary(data.answer); // Fetch sustainability summary once brand is set
+        console.log(data.answer)
+        console.log({brand})
       } else {
         console.error(`Failed to interpret barcode: ${barcode}`, data.failedReason);
       }
@@ -117,7 +121,6 @@ const Page: React.FC = () => {
     }
   };
 
-  // New function to fetch image using Bing Image Search API
   const fetchImage = async (searchTerm: string) => {
     try {
       const subscriptionKey = process.env.NEXT_PUBLIC_BING_API_KEY;
@@ -143,9 +146,35 @@ const Page: React.FC = () => {
     }
   };
 
+  const fetchBrandSummary = async (brand: string) => {
+    try {
+      const response = await fetch('/api/findBrand', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ brand }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`API responded with status ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (data.success) {
+        setSummary1(`${data.answer.article1.summary} (${data.answer.article1.source}).`);
+        setSummary2(`${data.answer.article2.summary} (${data.answer.article2.source}).`);
+        setSummary3(`${data.answer.article3.summary} (${data.answer.article3.source}).`);
+        console.log({summary1})
+      } else {
+        console.error(`Failed to interpret brand: ${brand}`, data.failedReason);
+      }
+    } catch (error) {
+      console.error("Error calling the interpret barcode API:", error);
+    }
+  };
+
   const startSlotMachineEffect = () => {
     let currentLetterIndex = 0;
-    const letters = "ABCDEF";
+    const letters = "ABCDF";
     const cycleTime = 50;
     setIsSlotMachineActive(true);
 
@@ -156,15 +185,14 @@ const Page: React.FC = () => {
 
     setTimeout(() => {
       clearInterval(intervalId);
-      setSustainabilityGrade(grade || "B"); // Set final grade when slot machine stops
-      setIsSlotMachineActive(false); // Ensure slot machine effect only runs once
+      setSustainabilityGrade(grade || "B");
+      setIsSlotMachineActive(false);
     }, 2000);
   };
 
-  // Trigger the slot machine effect only after `grade` is fully set
   useEffect(() => {
     if (grade && !isSlotMachineActive) {
-      setIsLoading(false); // Hide loading screen
+      setIsLoading(false);
       startSlotMachineEffect();
     }
   }, [grade]);
@@ -201,6 +229,10 @@ const Page: React.FC = () => {
               <h3>Grade</h3>
               <p>{sustainabilityGrade}</p>
             </div>
+            <div className="sustainability-summary">
+              <h4>Sustainability Summary:</h4>
+              <pre>{summary || 'No summary available.'}</pre>
+            </div>
           </div>
         </>
       )}
@@ -216,13 +248,34 @@ const Page: React.FC = () => {
         />
       )}
 
-      <section id="projects" className="section project invisible">
+      <section id="projects" class="section invisible">
+      <section id= "projects" class="section news">
+      <h2 class="section__title">Experience</h2>
+      <div class="hep">
+          <h3>example.</h3>
+          <h4 class="hep__description">
+            example.
+          </h4>
+        </div>
+        <div class="hep">
+          <h3>example.</h3>
+          <h4 class="hep__description">
+            example.
+          </h4>
+        </div>
+        <div class="hep">
+          <h3>example.</h3>
+          <h4 class="hep__description">
+            example.
+          </h4>
+        </div>
+      </section>
         <div className="projects__grid">
           <div className="project">
             <h3>EasyASL</h3>
-            <p className="project__description">
+            <h4 className="project__description">
               Hackathon winner accomplished within 36 hours. EasyASL provides a comprehensive tool for the hard-of-hearing community and other individuals who use American Sign Language (ASL).
-            </p>
+            </h4>
             <ul className="project__stack">
               <li className="project__stack-item">HTML</li>
               <li className="project__stack-item">Next.js</li>
@@ -230,7 +283,6 @@ const Page: React.FC = () => {
               <li className="project__stack-item">React</li>
               <li className="project__stack-item">Figma</li>
             </ul>
-
             <a href="https://github.com/azselim/EasyASL" aria-label="source code" className="link link--icon">
               <i aria-hidden="true" className="fab fa-github"></i>
             </a>
@@ -241,15 +293,14 @@ const Page: React.FC = () => {
 
           <div className="project">
             <h3>IFDAA (in progress)</h3>
-            <p className="project__description">
-              Personal project completed for ECE198 course. The Intelligent Fall Detection Alert Apparatus (IFDAA) provides a robust, cost-effective solution for at-risk individuals.
-            </p>
+            <h4 className="project__description">
+            {summary1}
+            </h4>
             <ul className="project__stack">
               <li className="project__stack-item">C++</li>
               <li className="project__stack-item">AutoDesk Fusion</li>
               <li className="project__stack-item">draw.io</li>
             </ul>
-
             <a href="https://github.com" aria-label="source code" className="link link--icon">
               <i aria-hidden="true" className="fab fa-github"></i>
             </a>
@@ -259,6 +310,9 @@ const Page: React.FC = () => {
           </div>
 
           <div className="project">
+          <h3>IFDAA (in progress)</h3>
+          <h4 className="project__description">
+          </h4>
             <h3 className="alt"></h3>
             <p className="bp1"></p>
             <p className="bp2"></p>
@@ -269,7 +323,6 @@ const Page: React.FC = () => {
               <li className="project__stack-item">???</li>
               <li className="project__stack-item">???</li>
             </ul>
-
             <a href="https://github.com" aria-label="source code" className="link link--icon">
               <i aria-hidden="true" className="fab fa-github"></i>
             </a>
