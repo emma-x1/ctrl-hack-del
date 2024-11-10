@@ -2,38 +2,85 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Page Container */
-.page-container {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  background-color: #1e1e1e;
-  color: #ffffff;
-  font-family: Arial, sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+:root {
+  --background: #1e1e1e;
+  --foreground: #ffffff;
+  --accent-color: #ffffff; /* Customize button color */
+  --font-geist-sans: Arial, Helvetica, sans-serif;
 }
 
-/* Company Name */
-.company-name {
-  position: absolute;
-  top: 40px;
-  width: 100%;
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans);
+}
+
+/* Main Page Container */
+.main-page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
   text-align: center;
+  padding: 20px;
+}
+
+/* Instructions */
+.instructions {
+  font-size: 1.2rem;
+  color: #cccccc;
+  margin-top: 8px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+/* Capture Button */
+.start-button, .capture-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  background-color: var(--accent-color);
+  color: #1e1e1e;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s;
+  margin-top: 16px;
+}
+
+.start-button:hover, .capture-button:hover {
+  background-color: #e0e0e0;
+}
+
+/* Company Name Styling */
+.company-name {
   font-size: 2.5rem;
   font-weight: bold;
   color: #ffffff;
-  margin-bottom: 20px;
+  margin-top: 20px;
+  text-align: center;
+  display: none; /* Initially hidden */
 }
 
-/* Video Wrapper with Fade-out Effect */
+.company-name.visible {
+  display: block; /* Show when camera fades out */
+}
+
+/* Video Wrapper - Centering the Camera */
 .video-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 80%;
+  justify-content: center;
+  width: 100%;
   max-width: 600px;
+  margin: 0 auto; /* Center wrapper */
   border-radius: 10px;
   overflow: hidden;
   transition: opacity 1s ease-in-out;
@@ -49,24 +96,6 @@
   width: 100%;
   height: auto;
   border-radius: 10px;
-}
-
-/* Capture Button - Positioned directly below video */
-.capture-button {
-  margin-top: 15px;
-  padding: 12px 24px;
-  background-color: #ffffff;
-  color: #1e1e1e;
-  font-size: 1rem;
-  font-weight: bold;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.capture-button:hover {
-  background-color: #cccccc;
 }
 
 /* Full-Screen Information Overlay */
@@ -137,9 +166,19 @@
   font-size: 1rem;
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+.sources ul li a:hover {
+  text-decoration: underline;
 }
 
+/* Barcode Number Display */
+.barcode-number {
+  position: absolute;
+  bottom: 60px;
+  left: 60px;
+  background-color: #444;
+  padding: 20px;
+  border-radius: 12px;
+  color: #ffffff;
+  font-size: 1.2rem;
+  text-align: center;
+}
