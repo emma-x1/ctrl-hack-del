@@ -17,6 +17,7 @@ const Page: React.FC = () => {
   const [isSlotMachineActive, setIsSlotMachineActive] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>(''); // New state variable for image URL
   const [error, setError] = useState<string>(''); // New state variable for errors
+  
 
   useEffect(() => {
     const startCamera = async () => {
@@ -106,6 +107,7 @@ const Page: React.FC = () => {
       if (data.success) {
         setBrand(data.answer);
         setTitle(data.title);
+        await fetchImage(data.title);
       } else {
         console.error(`Failed to interpret barcode: ${barcode}`, data.failedReason);
       }
@@ -117,7 +119,10 @@ const Page: React.FC = () => {
   // New function to fetch image using Bing Image Search API
   const fetchImage = async (searchTerm: string) => {
     try {
-      const subscriptionKey = process.env.NEXT_PUBLIC_BING_SEARCH_API_KEY as string;
+      const subscriptionKey = process.env.NEXT_PUBLIC_BING_API_KEY;
+      if (!subscriptionKey) {
+        throw new Error('The OPENAI_API_KEY environment variable is missing.');
+      }
       const endpoint = 'https://api.bing.microsoft.com/v7.0/images/search';
 
       const response = await axios.get(endpoint, {
@@ -200,17 +205,6 @@ const Page: React.FC = () => {
       )}
 
       {brand && (
-        <SqliteQueryComponent
-          companyName={brand}
-          onGradeUpdate={(fetchedGrade: string) => {
-            if (fetchedGrade) {
-              setGrade(fetchedGrade);
-            }
-          }}
-        />
-      )}
-
-            {brand && (
         <SqliteQueryComponent
           companyName={brand}
           onGradeUpdate={(fetchedGrade: string) => {
