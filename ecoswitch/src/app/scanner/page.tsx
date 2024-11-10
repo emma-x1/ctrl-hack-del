@@ -1,6 +1,7 @@
 'use client';
 import React, { useRef, useEffect, useState } from 'react';
 import SqliteQueryComponent from '@/components/SqliteQueryComponent';
+import findImage from '@/api/findImage';
 import '../globals.css';
 
 const Page: React.FC = () => {
