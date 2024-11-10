@@ -263,7 +263,7 @@ const Page: React.FC = () => {
             <p className="bp1"></p>
             <p className="bp2"></p>
             <p className="bp3"></p>
-            <img src={imageUrl}></img>
+            {imageUrl ? <img src={imageUrl} alt="Search Result" /> : null}
             <ul className="project__stack">
               <li className="project__stack-item">???</li>
               <li className="project__stack-item">???</li>
