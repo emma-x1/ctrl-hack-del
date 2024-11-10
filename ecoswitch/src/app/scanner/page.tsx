@@ -50,6 +50,7 @@ const Page: React.FC = () => {
     element?.classList.add("fade-in");
     setFadeOut(true);
     setIsLoading(true);
+    console.log("loading is true")
 
     setTimeout(async () => {
       if (videoRef.current && canvasRef.current) {
@@ -84,6 +85,7 @@ const Page: React.FC = () => {
 
       const data = await response.json();
       if (data.success) {
+        console.log(data.num); 
         await sendToFindInfoAPI(data.num);
       } else {
         console.error("Failed to interpret barcode:", data.failedReason);
@@ -108,6 +110,7 @@ const Page: React.FC = () => {
       const data = await response.json();
       if (data.success) {
         const brand = data.answer;
+        console.log(data);
         setTitle(data.title);
         await fetchImage(data.title);
         await fetchBrandSummary(data.answer); // Fetch sustainability summary once brand is set
@@ -148,7 +151,7 @@ const Page: React.FC = () => {
 
   const fetchBrandSummary = async (brand: string) => {
     try {
-      const response = await fetch('/api/findBrand', {
+      const response = await fetch('/api/newPull', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ brand }),
@@ -163,7 +166,7 @@ const Page: React.FC = () => {
         setSummary1(`${data.answer.article1.summary} (${data.answer.article1.source}).`);
         setSummary2(`${data.answer.article2.summary} (${data.answer.article2.source}).`);
         setSummary3(`${data.answer.article3.summary} (${data.answer.article3.source}).`);
-        console.log({summary1})
+        console.log({data});
       } else {
         console.error(`Failed to interpret brand: ${brand}`, data.failedReason);
       }
@@ -191,10 +194,16 @@ const Page: React.FC = () => {
   };
 
   useEffect(() => {
-    if (grade && !isSlotMachineActive) {
+    if (grade ) {
       setIsLoading(false);
+      console.log("loading is false")
       startSlotMachineEffect();
     }
+    // if (grade && !isSlotMachineActive) {
+    //   setIsLoading(false);
+    //   console.log("loading is false")
+    //   startSlotMachineEffect();
+    // }
   }, [grade]);
 
   return (
@@ -229,10 +238,6 @@ const Page: React.FC = () => {
               <h3>Grade</h3>
               <p>{sustainabilityGrade}</p>
             </div>
-            <div className="sustainability-summary">
-              <h4>Sustainability Summary:</h4>
-              <pre>{summary || 'No summary available.'}</pre>
-            </div>
           </div>
         </>
       )}
@@ -249,27 +254,26 @@ const Page: React.FC = () => {
       )}
 
       <section id="projects" class="section invisible">
-      <section id= "projects" class="section news">
-      <h2 class="section__title">Experience</h2>
-      <div class="hep">
-          <h3>example.</h3>
-          <h4 class="hep__description">
-            example.
-          </h4>
-        </div>
+      {summary1 && (
+        <section id= "projects" class="section news">
+        <h2 class="section__title">News</h2>
         <div class="hep">
-          <h3>example.</h3>
-          <h4 class="hep__description">
-            example.
-          </h4>
-        </div>
-        <div class="hep">
-          <h3>example.</h3>
-          <h4 class="hep__description">
-            example.
-          </h4>
-        </div>
-      </section>
+            <h4 class="hep__description">
+              {summary1}
+            </h4>
+          </div>
+          <div class="hep">
+            <h4 class="hep__description">
+              {summary2}
+            </h4>
+          </div>
+          <div class="hep">
+            <h4 class="hep__description">
+              {summary3}
+            </h4>
+          </div>
+        </section>
+      )}
         <div className="projects__grid">
           <div className="project">
             <h3>EasyASL</h3>
