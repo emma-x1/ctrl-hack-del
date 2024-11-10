@@ -1,21 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import initSqlJs from 'sql.js';
 
-// Load the WebAssembly file via HTTP, making it compatible with environments without `fs`.
+// Use a dynamic import to load sql.js only at runtime
 const loadSqlJs = async () => {
-  const SQL = await initSqlJs({
-    locateFile: () => '/sql-wasm.wasm', // Ensure sql-wasm.wasm is accessible from the public directory
+  const sqlModule = await import('sql.js');
+  return sqlModule.default({
+    locateFile: () => '/sql-wasm.wasm', // Make sure sql-wasm.wasm is in the public directory
   });
-  return SQL;
 };
 
-// Load the SQLite database file via HTTP fetch, avoiding `fs`.
-const loadDatabase = async (SQL) => {
-  // Fetch the database file from the public directory
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/mydatabase.sqlite`);
+// Load the SQLite database from an external source or pre-loaded memory buffer
+const loadDatabaseFromURL = async (SQL) => {
+  const response = await fetch('https://github.com/emma-x1/ctrl-hack-del/raw/refs/heads/main/ecoswitch/public/mydatabase.sqlite');
   const buffer = await response.arrayBuffer();
-
-  // Open the database using the buffer in memory
   return new SQL.Database(new Uint8Array(buffer));
 };
 
@@ -23,7 +19,6 @@ export async function POST(req: NextRequest) {
   try {
     const { companyName } = await req.json();
 
-    // Validate the input
     if (!companyName || typeof companyName !== 'string') {
       return NextResponse.json(
         { success: false, failedReason: 'Company name must be provided as a string', answer: '' },
@@ -31,11 +26,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Initialize sql.js and load the database
+    // Load sql.js dynamically and the database
     const SQL = await loadSqlJs();
-    const db = await loadDatabase(SQL);
+    const db = await loadDatabaseFromURL(SQL);
 
-    // Define and execute the query
     const query = `
       SELECT "Total Environmental Intensity (Revenue)"
       FROM mytable
@@ -44,15 +38,12 @@ export async function POST(req: NextRequest) {
     `;
     const results = db.exec(query, [`%${companyName}%`]);
 
-    // Format the result
     const intensity = results.length > 0 && results[0].values.length > 0
       ? results[0].values[0][0]
       : 'Company not found';
 
-    // Close the database
     db.close();
 
-    // Return the response
     return NextResponse.json(
       {
         success: true,
