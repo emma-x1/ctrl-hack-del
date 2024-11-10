@@ -155,8 +155,6 @@ const Page: React.FC = () => {
       )}
 
       <section id="projects" className="section project invisible">
-        <h2 className="section__title">Projects</h2>
-
         <div className="projects__grid">
           <div className="project">
             <h3>EasyASL</h3>
