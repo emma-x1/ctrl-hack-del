@@ -55,6 +55,16 @@ body {
   padding: 20px;
 }
 
+.page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+  padding: 20px;
+}
+
 /* Instructions */
 .instructions {
   font-size: 1.2rem;
