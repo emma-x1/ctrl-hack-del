@@ -121,13 +121,11 @@ body {
 
 .video-wrapper.fade-out {
   opacity: 0;
-  pointer-events: none;
 }
 
 .fade-in {
   margin-top: 5em;
   opacity: 1;
-  pointer-events: none;
 }
 
 .video {
@@ -228,7 +226,7 @@ body {
 .section {
   margin-top: 5em;
   transition: opacity 1s ease-in-out;
-  transition-delay: 2s;
+  transition-delay: 7s;
 }
 
 .section__title {
