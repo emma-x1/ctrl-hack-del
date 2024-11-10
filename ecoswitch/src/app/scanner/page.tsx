@@ -154,6 +154,12 @@ const Page: React.FC = () => {
       clearInterval(intervalId);
       setSustainabilityGrade(grade || "N/A");
     }, stopTime);
+
+    document.getElementById('grade').innerHTML = grade || "N/A";
+    document.getElementById('alt').innerHTML = alt || "N/A";
+    document.getElementById('bp1').innerHTML = bp1 || "N/A";
+    document.getElementById('bp2').innerHTML = bp2 || "N/A";
+    document.getElementById('bp3').innerHTML = bp3 || "N/A";
   };
 
   return (
@@ -183,6 +189,8 @@ const Page: React.FC = () => {
           </div>
         </>
       )}
+
+      
 
       <section id="projects" className="section project invisible">
         <div className="projects__grid">
@@ -227,8 +235,10 @@ const Page: React.FC = () => {
           </div>
 
           <div className="project">
-            <h3>Project 3</h3>
-            <p className="project__description">Announcement 11/11/24</p>
+            <h3 className="alt"></h3>
+            <p className="bp1"></p>
+            <p className="bp2"></p>
+            <p className="bp3"></p>
             <ul className="project__stack">
               <li className="project__stack-item">???</li>
               <li className="project__stack-item">???</li>
