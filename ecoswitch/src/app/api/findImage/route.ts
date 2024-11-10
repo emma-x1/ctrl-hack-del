@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const findImage = async (searchTerm: string): Promise<string> => {
   try {
-    const subscriptionKey = process.env.REACT_APP_BING_SEARCH_API_KEY as string;
+    const subscriptionKey = process.env.REACT_APP_BING_SEARCH_API_KEY;
     const endpoint = 'https://api.bing.microsoft.com/v7.0/images/search';
 
     const response = await axios.get(endpoint, {
