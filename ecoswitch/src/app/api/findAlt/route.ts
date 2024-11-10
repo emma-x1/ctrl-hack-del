@@ -10,7 +10,7 @@ if (!apiKey) {
 const client = new OpenAI({ apiKey });
 
 // Custom instructions for the OpenAI model
-const INSTRUCTIONS = 'You are tasked with finding a more sustainable alternative to the following product: Respond with the alternative product name and absolutely nothing else at all. Then, give 3 bullet points identifying why it is a better alternative. Print this in and return it in JSON format with each value below the comma: {"altname": <altname>, "bullet1": "<bullet1>", "bullet2": <bullet2>, "bullet3": <bullet3>}';
+const INSTRUCTIONS = 'You are tasked with finding a more sustainable alternative to the following product: Respond with the alternative product name and absolutely nothing else at all. Cross reference across your entire database and give only alternatives you are 100% sure exist. Anytime an alternative rather than inventing a product. For instance, "simply yours vegetable chips" do NOT exist and should never be mentioned. Then, give 3 bullet points identifying why it is a better alternative. Print this in and return it in JSON format with each value below the comma: {"altname": <altname>, "bullet1": "<bullet1>", "bullet2": <bullet2>, "bullet3": <bullet3>}';
 
 export async function POST(req: NextRequest) {
   try {
