@@ -30,31 +30,8 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="main-page-container">
-      {/* Header with Modal Trigger */}
-      <div className="flex items-center w-full justify-end mb-4">
-        <button onClick={toggleModal}>
-          <Image 
-            src="/info.svg" 
-            alt="Info icon" 
-            width={32} 
-            height={32} 
-            className="dark:invert"
-          />
-        </button>
-        
-        <Modal isOpen={isModalOpen} onClose={toggleModal}>
-          <div className="modal-content">
-            <p>
-              Here is some informative text about the item or topic you want to share.
-              This modal can be customized with more content, images, or links as needed.
-            </p>
-          </div>
-        </Modal>
-      </div>
-
-      {/* Main Logo and Instructions */}
-      <main className="logo">
+    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      <main className="flex flex-col gap-3 row-start-2 items-center sm:items-start mb-2">
         <Image
           src="/ecoswitch.svg" 
           alt="Ecoswitch logo"
@@ -80,7 +57,6 @@ export default function Home() {
         >
           <Image
             aria-hidden
-            className="dark:invert"
             src="/devpost.svg"
             alt="Devpost icon"
             width={16}

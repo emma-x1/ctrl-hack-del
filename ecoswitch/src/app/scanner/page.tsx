@@ -1,6 +1,7 @@
 'use client';
 import React, { useRef, useEffect, useState } from 'react';
 import '../globals.css';
+import '../globals.css';
 
 const Page: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -46,6 +47,7 @@ const Page: React.FC = () => {
         canvasRef.current.width = videoRef.current.videoWidth;
         canvasRef.current.height = videoRef.current.videoHeight;
         context?.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
+        context?.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
 
         const dataUrl = canvasRef.current.toDataURL('image/jpeg');
         await sendToGetNumAPI(dataUrl);
@@ -61,9 +63,13 @@ const Page: React.FC = () => {
   };
 
   const sendToGetNumAPI = async (base64Image: string) => {
+  const sendToGetNumAPI = async (base64Image: string) => {
     try {
       const response = await fetch('/api/getNumber', {
+      const response = await fetch('/api/getNumber', {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ photo: base64Image }),
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ photo: base64Image }),
       });

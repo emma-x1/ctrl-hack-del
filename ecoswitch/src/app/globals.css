@@ -5,7 +5,7 @@
 :root {
   --background: #1e1e1e;
   --foreground: #ffffff;
-  --accent-color: #ffffff;
+  --accent-color: #ffffff; /* Customize button color */
   --font-geist-sans: Arial, Helvetica, sans-serif;
 }
 
