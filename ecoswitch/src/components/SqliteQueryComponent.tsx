@@ -1,17 +1,17 @@
-"use client";
-import React, { useState, useEffect } from 'react';
+'use client';
+import React, { useEffect, useState } from 'react';
 
 const loadSqlJs = async () => {
   const initSqlJs = await import('sql.js/dist/sql-wasm.js');
   return initSqlJs.default({
-    locateFile: () => '/sql-wasm.wasm', // Location of sql-wasm.wasm file
+    locateFile: () => '/sql-wasm.wasm',
   });
 };
 
-const SqliteQueryComponent = ({ companyName, onIntensityUpdate, onGradeUpdate }) => {
+const SqliteQueryComponent = ({ companyName, onGradeUpdate }) => {
   const [db, setDb] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Load the database only once when the component mounts
   useEffect(() => {
     const loadDatabase = async () => {
       if (typeof window === 'undefined') return;
@@ -22,19 +22,20 @@ const SqliteQueryComponent = ({ companyName, onIntensityUpdate, onGradeUpdate })
         const buffer = await response.arrayBuffer();
         const dbInstance = new SQL.Database(new Uint8Array(buffer));
         setDb(dbInstance);
+        setLoading(false);
       } catch (error) {
         console.error("Failed to load the SQLite database:", error);
+        setLoading(false);
       }
     };
 
     loadDatabase();
   }, []);
 
-  // Fetch data whenever `companyName` changes and `db` is loaded
   useEffect(() => {
-    if (!db || !companyName) return;
-
     const fetchEnvironmentalIntensity = () => {
+      if (!db || !companyName) return;
+
       const query = `
         SELECT "Total Environmental Intensity (Revenue)"
         FROM company_data
@@ -44,33 +45,35 @@ const SqliteQueryComponent = ({ companyName, onIntensityUpdate, onGradeUpdate })
 
       const results = db.exec(query, [`%${companyName}%`]);
       if (results.length > 0 && results[0].values.length > 0) {
-        const newIntensity = parseFloat(results[0].values[0][0]) * 100;
-        onIntensityUpdate(newIntensity); // Send intensity to the parent
-
-        let newGrade = "B";
-        if (newIntensity <= -50) {
-          newGrade = "F";
-        } else if (newIntensity > -50 && newIntensity <= -5) {
-          newGrade = "D";
-        } else if (newIntensity > -5 && newIntensity <= 5) {
-          newGrade = "C";
-        } else if (newIntensity > 5 && newIntensity <= 50) {
-          newGrade = "B";
-        } else {
-          newGrade = "A";
-        }
+        const intensity = parseFloat(results[0].values[0][0]) * 100;
+        let grade;
         
-        onGradeUpdate(newGrade); // Send grade to the parent
+        if (intensity <= -50) {
+          grade = "F";
+        } else if (intensity > -50 && intensity <= -5) {
+          grade = "D";
+        } else if (intensity > -5 && intensity <= 5) {
+          grade = "C";
+        } else if (intensity > 5 && intensity <= 50) {
+          grade = "B";
+        } else {
+          grade = "A";
+        }
+
+        onGradeUpdate(grade); // Pass grade back to parent
       } else {
-        onIntensityUpdate(null); // Notify parent if intensity is not found
-        onGradeUpdate("B"); // Notify parent if grade is not available
+        onGradeUpdate("N/A"); // Default grade if not found
       }
     };
 
     fetchEnvironmentalIntensity();
-  }, [companyName, db]);
+  }, [db, companyName, onGradeUpdate]);
 
-  return null; // Render nothing in the child component
+  return (
+    <div>
+      {loading && <p>Loading database...</p>}
+    </div>
+  );
 };
 
 export default SqliteQueryComponent;

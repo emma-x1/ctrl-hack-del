@@ -1,5 +1,6 @@
 'use client';
 import React, { useRef, useEffect, useState } from 'react';
+import SqliteQueryComponent from '@/components/SqliteQueryComponent';
 import '../globals.css';
 
 const Page: React.FC = () => {
@@ -9,9 +10,10 @@ const Page: React.FC = () => {
   const [fadeOut, setFadeOut] = useState(false);
   const [title, setTitle] = useState<string | null>(null);
   const [brand, setBrand] = useState<string | null>(null);
-
+  const [grade, setGrade] = useState<string | null>(null);
   const [sustainabilityGrade, setSustainabilityGrade] = useState("A");
-  const finalGrade = "A+"; 
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSlotMachineActive, setIsSlotMachineActive] = useState(false);
 
   useEffect(() => {
     const startCamera = async () => {
@@ -37,10 +39,11 @@ const Page: React.FC = () => {
   }, []);
 
   const captureImage = async () => {
-    var element = document.getElementById("projects");
+    const element = document.getElementById("projects");
     element.classList.remove("invisible");
     element.classList.add("fade-in");
     setFadeOut(true);
+    setIsLoading(true); // Show loading screen immediately after capture
 
     setTimeout(async () => {
       if (videoRef.current && canvasRef.current) {
@@ -58,7 +61,6 @@ const Page: React.FC = () => {
         videoRef.current.srcObject = null;
       }
       setIsCameraVisible(false);
-      startSlotMachineEffect();
     }, 1000);
   };
 
@@ -111,9 +113,9 @@ const Page: React.FC = () => {
 
   const startSlotMachineEffect = () => {
     let currentLetterIndex = 0;
-    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const letters = "ABCDEF";
     const cycleTime = 50;
-    const stopTime = 2000;
+    setIsSlotMachineActive(true);
 
     const intervalId = setInterval(() => {
       setSustainabilityGrade(letters[currentLetterIndex]);
@@ -122,15 +124,18 @@ const Page: React.FC = () => {
 
     setTimeout(() => {
       clearInterval(intervalId);
-      setSustainabilityGrade(finalGrade);
-    }, stopTime);
-
-    document.getElementById('grade').innerHTML = grade || "N/A";
-    document.getElementById('alt').innerHTML = alt || "N/A";
-    document.getElementById('bp1').innerHTML = bp1 || "N/A";
-    document.getElementById('bp2').innerHTML = bp2 || "N/A";
-    document.getElementById('bp3').innerHTML = bp3 || "N/A";
+      setSustainabilityGrade(grade || "N/A"); // Set final grade when slot machine stops
+      setIsSlotMachineActive(false); // Ensure slot machine effect only runs once
+    }, 2000);
   };
+
+  // Trigger the slot machine effect only after `grade` is fully set
+  useEffect(() => {
+    if (grade && !isSlotMachineActive) {
+      setIsLoading(false); // Hide loading screen
+      startSlotMachineEffect();
+    }
+  }, [grade]);
 
   return (
     <div className="page-container">
@@ -144,7 +149,15 @@ const Page: React.FC = () => {
         </div>
       )}
 
-      {!isCameraVisible && (
+      {isLoading && (
+        <div className="info-overlay">
+          <div className="loading-screen">
+            <p>Loading...</p>
+          </div>
+        </div>
+      )}
+
+      {!isCameraVisible && !isLoading && (
         <>
           <div className="brand-info">
             {brand && <h1 className="brand-name">{brand}</h1>}
@@ -160,7 +173,16 @@ const Page: React.FC = () => {
         </>
       )}
 
-      
+      {brand && (
+        <SqliteQueryComponent
+          companyName={brand}
+          onGradeUpdate={(fetchedGrade: string) => {
+            if (fetchedGrade) {
+              setGrade(fetchedGrade);
+            }
+          }}
+        />
+      )}
 
       <section id="projects" className="section project invisible">
         <div className="projects__grid">
