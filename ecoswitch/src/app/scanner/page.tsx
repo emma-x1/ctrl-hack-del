@@ -7,7 +7,6 @@ const Page: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isCameraVisible, setIsCameraVisible] = useState(true);
   const [fadeOut, setFadeOut] = useState(false);
-  const [barcodeNumber, setBarcodeNumber] = useState<string | null>(null);
   const [title, setTitle] = useState<string | null>(null);
   const [brand, setBrand] = useState<string | null>(null);
 
@@ -43,28 +42,20 @@ const Page: React.FC = () => {
 
     setTimeout(async () => {
       if (videoRef.current && canvasRef.current) {
-        // Capture image from video feed
         const context = canvasRef.current.getContext('2d');
         canvasRef.current.width = videoRef.current.videoWidth;
         canvasRef.current.height = videoRef.current.videoHeight;
         context?.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
 
-        // Convert captured image to base64
         const dataUrl = canvasRef.current.toDataURL('image/jpeg');
-        console.log(dataUrl);
-
-        // Send to API
         await sendToGetNumAPI(dataUrl);
 
-        // Stop the video stream
         const stream = videoRef.current.srcObject as MediaStream;
         const tracks = stream.getTracks();
         tracks.forEach((track) => track.stop());
         videoRef.current.srcObject = null;
       }
       setIsCameraVisible(false);
-
-      // Start slot machine effect
       startSlotMachineEffect();
     }, 1000);
   };
@@ -83,8 +74,6 @@ const Page: React.FC = () => {
 
       const data = await response.json();
       if (data.success) {
-        setBarcodeNumber(data.num); // Update the barcode number in the state
-        console.log(data.num);
         await sendToFindInfoAPI(data.num);
       } else {
         console.error("Failed to interpret barcode:", data.failedReason);
@@ -108,7 +97,7 @@ const Page: React.FC = () => {
 
       const data = await response.json();
       if (data.success) {
-        setBrand(data.answer); // Update the brand in the state
+        setBrand(data.answer);
         setTitle(data.title);
       } else {
         console.error(`Failed to interpret barcode: ${barcode}`, data.failedReason);
@@ -118,20 +107,17 @@ const Page: React.FC = () => {
     }
   };
 
-  // Function to start the slot machine effect
   const startSlotMachineEffect = () => {
     let currentLetterIndex = 0;
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const cycleTime = 50; // Time in ms between each letter change
-    const stopTime = 2000; // Time in ms to stop cycling and display final grade
+    const cycleTime = 50;
+    const stopTime = 2000;
 
-    // Cycle through letters every `cycleTime` ms
     const intervalId = setInterval(() => {
       setSustainabilityGrade(letters[currentLetterIndex]);
       currentLetterIndex = (currentLetterIndex + 1) % letters.length;
     }, cycleTime);
 
-    // Stop the cycle after `stopTime` ms and set the final grade
     setTimeout(() => {
       clearInterval(intervalId);
       setSustainabilityGrade(finalGrade);
@@ -140,7 +126,6 @@ const Page: React.FC = () => {
 
   return (
     <div className="page-container">
-      {/* Conditionally render the camera and fade-out effect */}
       {isCameraVisible && (
         <div className={`video-wrapper ${fadeOut ? 'fade-out' : ''}`}>
           <video ref={videoRef} autoPlay playsInline className="video" />
@@ -151,26 +136,24 @@ const Page: React.FC = () => {
         </div>
       )}
 
-      {/* Information Overlay - appears after camera is removed */}
       {!isCameraVisible && (
         <>
-          {/* Company Name */}
-          <h1 className="company-name">Company Name</h1>
+          <div className="brand-info">
+            {brand && <h1 className="brand-name">{brand}</h1>}
+            {title && <h2 className="product-title">{title}</h2>}
+          </div>
 
           <div className="info-overlay">
-            {/* Sustainability Grade (Top Left) */}
             <div className="sustainability-grade">
               <h3>Grade</h3>
               <p>{sustainabilityGrade}</p>
             </div>
 
-            {/* Sustainability News (Top Right) */}
             <div className="sustainability-news">
               <h3>News</h3>
               <p>Latest sustainability efforts</p>
             </div>
 
-            {/* Sources (Bottom Right) */}
             <div className="sources">
               <h3>Sources</h3>
               <ul>
@@ -178,15 +161,6 @@ const Page: React.FC = () => {
                 <li><a href="#source2">Source 2</a></li>
               </ul>
             </div>
-
-            {/* Display Barcode Number */}
-            {barcodeNumber && (
-              <div className="barcode-number">
-                <h3>Barcode Number:</h3>
-                <p>{brand}</p>
-                <p>{title}</p>
-              </div>
-            )}
           </div>
         </>
       )}
