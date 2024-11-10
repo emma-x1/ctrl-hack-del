@@ -5,8 +5,32 @@
 :root {
   --background: #1e1e1e;
   --foreground: #ffffff;
-  --accent-color: #ffffff; /* Customize button color */
+  --accent-color: #e4e2dd; /* Customize button color */
   --font-geist-sans: Arial, Helvetica, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.2;
+  color: var(--clr-fg-alt);
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+ul {
+  list-style-type: none;
+}
+
+a {
+  text-decoration: none;
 }
 
 /* Smooth Scrolling */
@@ -60,7 +84,7 @@ body {
 }
 
 .start-button:hover, .capture-button:hover {
-  background-color: #e0e0e0;
+  background-color: #FFFFFF;
 }
 
 /* Company Name Styling - Big and Centered */
@@ -100,6 +124,12 @@ body {
   pointer-events: none;
 }
 
+.fade-in {
+  margin-top: 5em;
+  opacity: 1;
+  pointer-events: none;
+}
+
 .video {
   width: 100%;
   height: auto;
@@ -130,54 +160,6 @@ body {
   width: 150px;
 }
 
-/* Sustainability News (Top Right) */
-/*.sustainability-news {
-  position: absolute;
-  top: 60px;
-  right: 60px;
-  max-width: 250px;
-  background-color: #333;
-  padding: 20px;
-  border-radius: 12px;
-  color: #ffd700;
-  font-size: 1.2rem;
-  text-align: left;
-}
-
-/* Sources (Bottom Right) */
-/*.sources {
-  position: absolute;
-  bottom: 60px;
-  right: 60px;
-  background-color: #333;
-  padding: 20px;
-  border-radius: 12px;
-  color: #cccccc;
-  font-size: 1.1rem;
-  text-align: left;
-}
-
-.sources ul {
-  list-style: none;
-  padding: 0;
-  margin: 10px 0 0;
-}
-
-.sources ul li {
-  margin: 8px 0;
-}
-
-.sources ul li a {
-  color: #4caf50;
-  text-decoration: none;
-  font-size: 1rem;
-}
-
-.sources ul li a:hover {
-  text-decoration: underline;
-}
-*/
-
 /* Brand and Title Display - Wrapping */
 .brand-info {
   display: flex;
@@ -200,4 +182,61 @@ body {
   font-weight: normal;
   color: #cccccc;
   margin-top: 8px;
+}
+
+.projects__grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18em, 1fr));
+  grid-gap: 2em;
+}
+
+.project {
+  padding: 2em;
+  margin: 0 auto;
+  text-align: center;
+  transition: transform 0.2s linear;
+}
+
+.project:hover {
+  transform: translateY(-7px);
+}
+
+.project__description {
+  margin-top: 1em;
+}
+
+.project__stack {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 1.2em 0;
+}
+
+.project__stack-item {
+  margin: 0.5em;
+  font-weight: 500;
+  font-size: 0.8rem;
+  color: var(--clr-fg-alt);
+}
+
+.project .link--icon {
+  margin-left: 0.5em;
+}
+
+.section {
+  margin-top: 5em;
+  transition: opacity 1s ease-in-out;
+  transition-delay: 2s;
+}
+
+.section__title {
+  text-align: center;
+  margin-bottom: 1em;
+  text-transform: uppercase;
+}
+
+.invisible {
+  opacity:0;
 }

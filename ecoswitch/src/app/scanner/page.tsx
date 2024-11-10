@@ -10,9 +10,8 @@ const Page: React.FC = () => {
   const [title, setTitle] = useState<string | null>(null);
   const [brand, setBrand] = useState<string | null>(null);
 
-  // State for the sustainability grade with slot machine effect
   const [sustainabilityGrade, setSustainabilityGrade] = useState("A");
-  const finalGrade = "A+"; // The final grade to display
+  const finalGrade = "A+"; 
 
   useEffect(() => {
     const startCamera = async () => {
@@ -38,6 +37,9 @@ const Page: React.FC = () => {
   }, []);
 
   const captureImage = async () => {
+    var element = document.getElementById("projects");
+    element.classList.remove("invisible");
+    element.classList.add("fade-in");
     setFadeOut(true);
 
     setTimeout(async () => {
@@ -148,13 +150,75 @@ const Page: React.FC = () => {
               <h3>Grade</h3>
               <p>{sustainabilityGrade}</p>
             </div>
-
-
           </div>
         </>
       )}
+
+      <section id="projects" className="section project invisible">
+        <h2 className="section__title">Projects</h2>
+
+        <div className="projects__grid">
+          <div className="project">
+            <h3>EasyASL</h3>
+            <p className="project__description">
+              Hackathon winner accomplished within 36 hours. EasyASL provides a comprehensive tool for the hard-of-hearing community and other individuals who use American Sign Language (ASL).
+            </p>
+            <ul className="project__stack">
+              <li className="project__stack-item">HTML</li>
+              <li className="project__stack-item">Next.js</li>
+              <li className="project__stack-item">TypeScript</li>
+              <li className="project__stack-item">React</li>
+              <li className="project__stack-item">Figma</li>
+            </ul>
+
+            <a href="https://github.com/azselim/EasyASL" aria-label="source code" className="link link--icon">
+              <i aria-hidden="true" className="fab fa-github"></i>
+            </a>
+            <a href="https://devpost.com/software/easyasl" aria-label="live preview" className="link link--icon">
+              <i aria-hidden="true" className="fas fa-external-link-alt"></i>
+            </a>
+          </div>
+
+          <div className="project">
+            <h3>IFDAA (in progress)</h3>
+            <p className="project__description">
+              Personal project completed for ECE198 course. The Intelligent Fall Detection Alert Apparatus (IFDAA) provides a robust, cost-effective solution for at-risk individuals.
+            </p>
+            <ul className="project__stack">
+              <li className="project__stack-item">C++</li>
+              <li className="project__stack-item">AutoDesk Fusion</li>
+              <li className="project__stack-item">draw.io</li>
+            </ul>
+
+            <a href="https://github.com" aria-label="source code" className="link link--icon">
+              <i aria-hidden="true" className="fab fa-github"></i>
+            </a>
+            <a href="https://example.com" aria-label="live preview" className="link link--icon">
+              <i aria-hidden="true" className="fas fa-external-link-alt"></i>
+            </a>
+          </div>
+
+          <div className="project">
+            <h3>Project 3</h3>
+            <p className="project__description">Announcement 11/11/24</p>
+            <ul className="project__stack">
+              <li className="project__stack-item">???</li>
+              <li className="project__stack-item">???</li>
+              <li className="project__stack-item">???</li>
+            </ul>
+
+            <a href="https://github.com" aria-label="source code" className="link link--icon">
+              <i aria-hidden="true" className="fab fa-github"></i>
+            </a>
+            <a href="https://example.com" aria-label="live preview" className="link link--icon">
+              <i aria-hidden="true" className="fas fa-external-link-alt"></i>
+            </a>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
 
 export default Page;
+
