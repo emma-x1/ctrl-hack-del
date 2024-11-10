@@ -1,41 +1,38 @@
 'use client';
 
 import Image from "next/image";
-import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import Modal from "@/components/Modal";
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const router = useRouter(); // initialize Next.js router for navigation
+  const router = useRouter();
 
   const toggleModal = () => setIsModalOpen(!isModalOpen);
 
-  // Redirect to the scanner page
   const redirectToScanner = () => {
     router.push("/scanner");
   };
 
   useEffect(() => {
-    // Handler function for keydown event
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Enter") {
         redirectToScanner();
       }
     };
 
-    // Attach the event listener
     window.addEventListener("keydown", handleKeyDown);
 
-    // Clean up the event listener on component unmount
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
 
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[var(--font-geist-sans)]">
-      <div className="flex items-center w-full justify-end">
+    <div className="main-page-container">
+      {/* Header with Modal Trigger */}
+      <div className="flex items-center w-full justify-end mb-4">
         <button onClick={toggleModal}>
           <Image 
             src="/info.svg" 
@@ -47,28 +44,34 @@ export default function Home() {
         </button>
         
         <Modal isOpen={isModalOpen} onClose={toggleModal}>
-          <p>
-            Here is some informative text about the item or topic you want to share.
-            This modal can be customized with more content, images, or links as needed.
-          </p>
+          <div className="modal-content">
+            <p>
+              Here is some informative text about the item or topic you want to share.
+              This modal can be customized with more content, images, or links as needed.
+            </p>
+          </div>
         </Modal>
       </div>
 
-      <main className="flex flex-col row-start-2 items-center sm:items-center mb-2">
+      {/* Main Logo and Instructions */}
+      <main className="logo">
         <Image
           src="/ecoswitch.svg" 
-          alt="Next.js logo"
+          alt="Ecoswitch logo"
           width={450}
           height={45}
           priority
         />
-        <div className="font-ls text-center">
-          <b>click enter to get started.</b>
+        <div className="instructions">
+          {/* Updated Button */}
+          <button onClick={redirectToScanner} className="start-button">
+            click enter to get started.
+          </button>
         </div>
       </main>
 
-
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
+      {/* Footer Links */}
+      <footer className="footer-links">
         <a
           className="flex items-center gap-2 hover:underline hover:underline-offset-2"
           href="https://devpost.com/software/ecoswitch"
