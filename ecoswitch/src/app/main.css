@@ -1,0 +1,183 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.scanner-page {
+    --background: #1e1e1e;
+    --foreground: #ffffff;
+    --accent-color: #e4e2dd;
+    --font-family: "Poppins", sans-serif;
+    --line-height: 1.5;
+    --clr-bg-alt: #2a2f4c;
+    --clr-fg-alt: #cdcdff;
+    --clr-primary: #90a0d9;
+    --shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+      rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+  }
+  
+  /* Apply styles only within the scanner page */
+  .scanner-page {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-family);
+    line-height: var(--line-height);
+    padding: 20px;
+  }
+
+  .instructions {
+    text-align: center;
+  }
+  
+  .scanner-page a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .scanner-page h1,
+  .scanner-page h2,
+  .scanner-page h3,
+  .scanner-page h4 {
+    line-height: 1.2;
+    color: var(--clr-fg-alt);
+  }
+  
+  .scanner-page p {
+    font-size: 1.2rem;
+    color: #cccccc;
+    margin-top: 8px;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  
+  .scanner-page ul {
+    list-style-type: none;
+  }
+  
+  .scanner-page .page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+  }
+  
+  .scanner-page .start-button,
+  .scanner-page .capture-button {
+    /* Your button styles */
+    /* ... */
+  }
+  
+  /* Video Wrapper */
+  .scanner-page .video-wrapper {
+    /* Your video wrapper styles */
+    /* ... */
+  }
+  
+  /* Information Overlay */
+  .scanner-page .info-overlay {
+    /* Your info overlay styles */
+    /* ... */
+  }
+  
+  /* Sustainability Grade */
+  .scanner-page .sustainability-grade {
+    /* Your sustainability grade styles */
+    /* ... */
+  }
+  
+  /* Brand Information */
+  .scanner-page .brand-info {
+    /* Your brand info styles */
+    /* ... */
+  }
+  
+  /* Section for Projects */
+  .scanner-page .section {
+    margin-top: 5em;
+    transition: opacity 1s ease-in-out;
+  }
+  
+  .scanner-page .section__title {
+    text-align: center;
+    margin-bottom: 1em;
+    text-transform: uppercase;
+  }
+  
+  /* Topmost Box */
+  .scanner-page .hep {
+    width: 100%;
+    padding: 2em;
+    text-align: center;
+    border: 1px solid #e4e2dd; /* Rounded border */
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s linear;
+  }
+  
+  .scanner-page .hep:hover {
+    transform: translateY(-7px);
+  }
+  
+  /* Projects Grid */
+  .scanner-page .projects__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18em, 1fr));
+    grid-gap: 2em;
+    margin-top: 2em;
+  }
+  
+  .scanner-page .project {
+    padding: 2em;
+    text-align: center;
+    border: 1px solid #e4e2dd; /* Rounded border */
+    border-radius: 10px;
+    transition: transform 0.2s linear;
+  }
+  
+  .scanner-page .project:hover {
+    transform: translateY(-7px);
+  }
+  
+  .scanner-page .project__description {
+    margin-top: 1em;
+  }
+  
+  .scanner-page .project__stack {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 1.2em 0;
+  }
+  
+  .scanner-page .project__stack-item {
+    margin: 0.5em;
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: var(--clr-fg-alt);
+  }
+  
+  .scanner-page .project .link--icon {
+    margin-left: 0.5em;
+  }
+  
+  /* Fade Animations */
+  .scanner-page .invisible {
+    opacity: 0;
+  }
+  
+  @keyframes fadein {
+    0% {
+      opacity: 0;
+    }
+  
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  .scanner-page .fade-in {
+    opacity: 1;
+    animation: fadein 1.1s ease;
+    pointer-events: auto;
+    animation-fill-mode: forwards;
+  }
+  
