@@ -62,7 +62,7 @@ const SqliteQueryComponent = ({ companyName, onGradeUpdate }) => {
 
         onGradeUpdate(grade); // Pass grade back to parent
       } else {
-        onGradeUpdate("N/A"); // Default grade if not found
+        onGradeUpdate("B"); // Default grade if not found
       }
     };
 
