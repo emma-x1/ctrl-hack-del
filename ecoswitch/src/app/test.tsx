@@ -11,10 +11,6 @@ const Page: React.FC = () => {
   const [title, setTitle] = useState<string | null>(null);
   const [brand, setBrand] = useState<string | null>(null);
 
-  // State for the sustainability grade with slot machine effect
-  const [sustainabilityGrade, setSustainabilityGrade] = useState("A");
-  const finalGrade = "A+"; // The final grade to display
-
   useEffect(() => {
     const startCamera = async () => {
       try {
@@ -63,9 +59,6 @@ const Page: React.FC = () => {
         videoRef.current.srcObject = null;
       }
       setIsCameraVisible(false);
-
-      // Start slot machine effect
-      startSlotMachineEffect();
     }, 1000);
   };
 
@@ -108,7 +101,7 @@ const Page: React.FC = () => {
 
       const data = await response.json();
       if (data.success) {
-        setBrand(data.answer); // Update the brand in the state
+        setBrand(data.answer); // Update the barcode number in the state
         setTitle(data.title);
       } else {
         console.error(`Failed to interpret barcode: ${barcode}`, data.failedReason);
@@ -116,26 +109,6 @@ const Page: React.FC = () => {
     } catch (error) {
       console.error("Error calling the interpret barcode API:", error);
     }
-  };
-
-  // Function to start the slot machine effect
-  const startSlotMachineEffect = () => {
-    let currentLetterIndex = 0;
-    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const cycleTime = 50; // Time in ms between each letter change
-    const stopTime = 2000; // Time in ms to stop cycling and display final grade
-
-    // Cycle through letters every `cycleTime` ms
-    const intervalId = setInterval(() => {
-      setSustainabilityGrade(letters[currentLetterIndex]);
-      currentLetterIndex = (currentLetterIndex + 1) % letters.length;
-    }, cycleTime);
-
-    // Stop the cycle after `stopTime` ms and set the final grade
-    setTimeout(() => {
-      clearInterval(intervalId);
-      setSustainabilityGrade(finalGrade);
-    }, stopTime);
   };
 
   return (
@@ -161,7 +134,7 @@ const Page: React.FC = () => {
             {/* Sustainability Grade (Top Left) */}
             <div className="sustainability-grade">
               <h3>Grade</h3>
-              <p>{sustainabilityGrade}</p>
+              <p>A+</p>
             </div>
 
             {/* Sustainability News (Top Right) */}
