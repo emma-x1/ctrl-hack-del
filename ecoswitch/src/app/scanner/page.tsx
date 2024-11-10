@@ -106,7 +106,6 @@ const Page: React.FC = () => {
       if (data.success) {
         setBrand(data.answer);
         setTitle(data.title);
-        await fetchImage(data.title); // Fetch image after getting the title
       } else {
         console.error(`Failed to interpret barcode: ${barcode}`, data.failedReason);
       }
@@ -201,6 +200,17 @@ const Page: React.FC = () => {
       )}
 
       {brand && (
+        <SqliteQueryComponent
+          companyName={brand}
+          onGradeUpdate={(fetchedGrade: string) => {
+            if (fetchedGrade) {
+              setGrade(fetchedGrade);
+            }
+          }}
+        />
+      )}
+
+            {brand && (
         <SqliteQueryComponent
           companyName={brand}
           onGradeUpdate={(fetchedGrade: string) => {
