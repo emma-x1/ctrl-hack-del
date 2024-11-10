@@ -41,7 +41,7 @@ const Page: React.FC = () => {
         context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
 
         // Convert the canvas image to base64 format
-        const dataUrl = canvasRef.current.toDataURL('image/png');
+        const dataUrl = canvasRef.current.toDataURL('image/jpeg');
 
         // Call the API with the captured image
         await sendToAPI(dataUrl);
@@ -53,12 +53,12 @@ const Page: React.FC = () => {
     try {
       console.log("Base64 Image:", base64Image); // Log the base64 image to verify it's correctly formatted
 
-      const response = await fetch('/api/base64', {
+      const response = await fetch('/api/getNumber', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ base64Image }),
+        body: JSON.stringify({ photo: base64Image }),
       });
 
       if (!response.ok) {
@@ -69,7 +69,8 @@ const Page: React.FC = () => {
 
       const data = await response.json();
       if (data.success) {
-        setBarcodeNumber(data.answer); // Update the barcode number in the state
+        console.log(data);
+        setBarcodeNumber(data.num); // Update the barcode number in the state
       } else {
         console.error("Failed to interpret barcode:", data.failedReason);
       }
