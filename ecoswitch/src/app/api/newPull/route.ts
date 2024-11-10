@@ -10,15 +10,15 @@ if (!apiKey) {
 const client = new OpenAI({ apiKey });
 
 // Custom instructions for the OpenAI model
-const INSTRUCTIONS = 'You are tasked with finding a more sustainable alternative to the following product: Respond with the alternative product name and absolutely nothing else at all. Then, give 3 bullet points identifying why it is a better alternative. Print this in and return it in JSON format with each value below the comma: {"altname": <altname>, "bullet1": "<bullet1>", "bullet2": <bullet2>, "bullet3": <bullet3>}';
+const INSTRUCTIONS = 'Search the web for recent news about a given brand, with a focus on sustainability. From 3 of the articles you find, generate a bullet point summarizing each. Use reputable, third-party sources and you MUST include both positive and negative sources. Do not under any circumstance use the brand itself as source, search for something else. For each article, please provide a short summary of the info and the name of the source, with no addtional content returned. The response must be in the strict JSON format {"article1" : {"summary" : <summary>, "source" : <source news>}, "article2" : {"summary" : <summary>, "source" : <source news>}, "article3" : {"summary" : <summary>, "source" : <source news>}';
 
 export async function POST(req: NextRequest) {
   try {
-    const { product } = await req.json();
+    const { brand } = await req.json();
 
-    if (!product || typeof product !== 'string') {
+    if (!brand || typeof brand !== 'string') {
       return NextResponse.json(
-        { success: false, failedReason: 'Product name must be provided and must be a string', answer: '' },
+        { success: false, failedReason: 'Brand name must be provided and must be a string', answer: '' },
         { status: 400 }
       );
     }
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
           },
           {
             role: 'user',
-            content: product,
+            content: brand,
           },
         ],
         max_tokens: 1000,
