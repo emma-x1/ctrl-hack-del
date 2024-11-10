@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
 
     // Extract the AI's response
     const rawAnswer = completion.choices?.[0]?.message?.content as string;
-    // const answer = JSON.parse(rawAnswer);
+    const answer = JSON.parse(rawAnswer);
 
     // const alt = answer?.altname || '';
     // const bp1 = answer?.bullet1 || '';
@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       {
         success: true,
-        answer: rawAnswer,
+        answer: answer,
       },
       { status: 200 }
     );
