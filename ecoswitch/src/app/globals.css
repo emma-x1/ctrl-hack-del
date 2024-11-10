@@ -9,6 +9,11 @@
   --font-geist-sans: Arial, Helvetica, sans-serif;
 }
 
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -113,13 +118,12 @@ body {
   position: absolute;
   top: 60px;
   left: 60px;
-  background-color: #4caf50;
   padding: 20px;
   border-radius: 12px;
   color: #fff;
   font-weight: bold;
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 4rem;
   width: 150px;
 }
 
