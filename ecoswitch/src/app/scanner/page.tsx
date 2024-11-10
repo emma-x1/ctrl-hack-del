@@ -258,6 +258,7 @@ const Page: React.FC = () => {
             <p className="bp1"></p>
             <p className="bp2"></p>
             <p className="bp3"></p>
+            <img src={imageUrl}></img>
             <ul className="project__stack">
               <li className="project__stack-item">???</li>
               <li className="project__stack-item">???</li>
