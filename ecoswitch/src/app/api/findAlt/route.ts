@@ -10,7 +10,7 @@ if (!apiKey) {
 const client = new OpenAI({ apiKey });
 
 // Custom instructions for the OpenAI model
-const INSTRUCTIONS = 'You are tasked with finding a more sustainable alternative to the following product: Respond with just the product name and absolutely nothing else at all. Then, give 3 bullet points identifying why it is a better alternative. Print this in and return it in JSON format with each value below the comma: {"altname": <altname>, "bullet1": "<bullet1>", "bullet2": <bullet2>, "bullet3": <bullet3>}'
+const INSTRUCTIONS = 'You are tasked with grading the sustainability and finding a more sustainable alternative to the following product: Respond with just the grade (Between F and A+) you would assign to the original product. Then, respond with the alternative product name and absolutely nothing else at all. Then, give 3 bullet points identifying why it is a better alternative. Print this in and return it in JSON format with each value below the comma: {"grade": <grade>, "altname": <altname>, "bullet1": "<bullet1>", "bullet2": <bullet2>, "bullet3": <bullet3>}'
 
 export async function POST(req: NextRequest) {
   try {
@@ -42,6 +42,7 @@ export async function POST(req: NextRequest) {
     const rawAnswer = completion.choices?.[0]?.message?.content as string;
     const answer = JSON.parse(rawAnswer);
 
+    //const grade = answer?.altname || '';
     // const alt = answer?.altname || '';
     // const bp1 = answer?.bullet1 || '';
     // const bp2 = answer?.bullet2 || '';

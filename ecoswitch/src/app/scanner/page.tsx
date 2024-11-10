@@ -9,9 +9,12 @@ const Page: React.FC = () => {
   const [fadeOut, setFadeOut] = useState(false);
   const [title, setTitle] = useState<string | null>(null);
   const [brand, setBrand] = useState<string | null>(null);
-
+  const [grade, setGrade] = useState<string | null>(null);
+  const [alt, setAlt] = useState<string | null>(null);
+  const [bp1, setBp1] = useState<string | null>(null);
+  const [bp2, setBp2] = useState<string | null>(null);
+  const [bp3, setBp3] = useState<string | null>(null);
   const [sustainabilityGrade, setSustainabilityGrade] = useState("A");
-  const finalGrade = "A+"; 
 
   useEffect(() => {
     const startCamera = async () => {
@@ -85,9 +88,36 @@ const Page: React.FC = () => {
     }
   };
 
-  const sendToFindInfoAPI = async (barcode: string) => {
+  const sendToFindInfoAPI = async (alt: string) => {
     try {
       const response = await fetch('/api/findBrand', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ alt }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`API responded with status ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (data.success) {
+        setGrade(data.grade);
+        setAlt(data.altname);
+        setBp1(data.bullet1);
+        setBp2(data.bullet2);
+        setBp3(data.bullet3);
+      } else {
+        console.error(`Failed to interpret barcode: ${alt}`, data.failedReason);
+      }
+    } catch (error) {
+      console.error("Error calling the interpret barcode API:", error);
+    }
+  };
+
+  const sendToFindAltAPI = async (barcode: string) => {
+    try {
+      const response = await fetch('/api/findAlt', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ barcode }),
@@ -111,7 +141,7 @@ const Page: React.FC = () => {
 
   const startSlotMachineEffect = () => {
     let currentLetterIndex = 0;
-    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const letters = "ABCDEF";
     const cycleTime = 50;
     const stopTime = 2000;
 
@@ -122,7 +152,7 @@ const Page: React.FC = () => {
 
     setTimeout(() => {
       clearInterval(intervalId);
-      setSustainabilityGrade(finalGrade);
+      setSustainabilityGrade(grade || "N/A");
     }, stopTime);
   };
 
