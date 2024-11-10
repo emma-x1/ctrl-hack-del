@@ -151,7 +151,7 @@ const Page: React.FC = () => {
 
     setTimeout(() => {
       clearInterval(intervalId);
-      setSustainabilityGrade(grade || "N/A"); // Set final grade when slot machine stops
+      setSustainabilityGrade(grade || "B"); // Set final grade when slot machine stops
       setIsSlotMachineActive(false); // Ensure slot machine effect only runs once
     }, 2000);
   };
