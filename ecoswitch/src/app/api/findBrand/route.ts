@@ -13,7 +13,7 @@ if (!apiKeyBar) {
 
 const client = new OpenAI({ apiKey });
 
-const INSTRUCTIONS = 'You are a parent brand identifier. Given a brand and/or manufacturer of a product, search the web to find its parent brand and output it on its own with no additional explanation or quotation marks.';
+const INSTRUCTIONS = 'You are a parent company identifier. Given a brand and/or manufacturer of a product, search the web to find its parent company and output it on its own with no additional explanation or quotation marks. Make sure to output the upper most parent company, meaning if one company owns another that owns another, the company at the top which is owned by no other.';
 
 export async function POST(req: NextRequest) {
   try {
