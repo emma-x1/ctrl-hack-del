@@ -79,7 +79,6 @@ export default function Home() {
         >
           <Image
             aria-hidden
-            className="dark:invert"
             src="/devpost.svg"
             alt="Devpost icon"
             width={16}
