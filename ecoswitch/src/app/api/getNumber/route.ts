@@ -11,7 +11,7 @@ const client = new OpenAI({ apiKey });
 
 // Custom instructions for the OpenAI model
 const INSTRUCTIONS =
-  'You are a barcode identifier. Given an image of a product with a visible barcode, read the number underneath the barcode and return it in JSON format: {"number": <barcode_number>} with no additional explanation and do not add any spaces. This is incredibly easy and the only reason this would not be possible is if the digits were illegible.';
+  'You are a barcode identifier. Given an image of a product with a visible barcode, read the number underneath the barcode and return it in JSON format: {"number": <barcode_number>} with no additional explanation and do not add any spaces. Ensure that ALL numbers from the barcode are included, do not leave out the numbers on the edges of the code. This is incredibly easy and the only reason this would not be possible is if the digits were illegible.';
 
   export async function POST(request: NextRequest) {
   try {
