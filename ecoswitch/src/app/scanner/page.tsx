@@ -2,6 +2,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import SqliteQueryComponent from '@/components/SqliteQueryComponent';
 import '../globals.css';
+import axios from 'axios';
 
 const Page: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -14,6 +15,8 @@ const Page: React.FC = () => {
   const [sustainabilityGrade, setSustainabilityGrade] = useState("A");
   const [isLoading, setIsLoading] = useState(false);
   const [isSlotMachineActive, setIsSlotMachineActive] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string>(''); // New state variable for image URL
+  const [error, setError] = useState<string>(''); // New state variable for errors
 
   useEffect(() => {
     const startCamera = async () => {
@@ -40,8 +43,8 @@ const Page: React.FC = () => {
 
   const captureImage = async () => {
     const element = document.getElementById("projects");
-    element.classList.remove("invisible");
-    element.classList.add("fade-in");
+    element?.classList.remove("invisible");
+    element?.classList.add("fade-in");
     setFadeOut(true);
     setIsLoading(true); // Show loading screen immediately after capture
 
@@ -103,11 +106,35 @@ const Page: React.FC = () => {
       if (data.success) {
         setBrand(data.answer);
         setTitle(data.title);
+        await fetchImage(data.title); // Fetch image after getting the title
       } else {
         console.error(`Failed to interpret barcode: ${barcode}`, data.failedReason);
       }
     } catch (error) {
       console.error("Error calling the interpret barcode API:", error);
+    }
+  };
+
+  // New function to fetch image using Bing Image Search API
+  const fetchImage = async (searchTerm: string) => {
+    try {
+      const subscriptionKey = process.env.NEXT_PUBLIC_BING_SEARCH_API_KEY as string;
+      const endpoint = 'https://api.bing.microsoft.com/v7.0/images/search';
+
+      const response = await axios.get(endpoint, {
+        params: { q: searchTerm, count: 1 },
+        headers: { 'Ocp-Apim-Subscription-Key': subscriptionKey },
+      });
+
+      if (response.data.value && response.data.value.length > 0) {
+        const firstImageResult = response.data.value[0];
+        setImageUrl(firstImageResult.contentUrl);
+      } else {
+        setError('No images found.');
+      }
+    } catch (error) {
+      console.error('Error fetching image:', error);
+      setError('Error fetching image.');
     }
   };
 
@@ -231,6 +258,7 @@ const Page: React.FC = () => {
             <p className="bp1"></p>
             <p className="bp2"></p>
             <p className="bp3"></p>
+            <img src={imageUrl}></img>
             <ul className="project__stack">
               <li className="project__stack-item">???</li>
               <li className="project__stack-item">???</li>
