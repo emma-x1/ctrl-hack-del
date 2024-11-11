@@ -20,7 +20,9 @@ const SqliteQueryComponent = ({ companyName, onGradeUpdate }) => {
         const SQL = await loadSqlJs();
         const response = await fetch('/envData.sqlite'); // Ensure this file is in the public directory
         const buffer = await response.arrayBuffer();
+        console.log(`resppnsSQLlite: ${response}`)
         const dbInstance = new SQL.Database(new Uint8Array(buffer));
+        console.log(`dbinstance: ${dbInstance}`)
         setDb(dbInstance);
         setLoading(false);
       } catch (error) {
@@ -47,7 +49,8 @@ const SqliteQueryComponent = ({ companyName, onGradeUpdate }) => {
       if (results.length > 0 && results[0].values.length > 0) {
         const intensity = parseFloat(results[0].values[0][0]) * 100;
         let grade;
-        
+        console.log(`results ${results}`)
+        console.log(`grade: ${grade}`)
         if (intensity <= -50) {
           grade = "F";
         } else if (intensity > -50 && intensity <= -5) {

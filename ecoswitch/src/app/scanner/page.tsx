@@ -57,6 +57,7 @@ const Page: React.FC = () => {
     element?.classList.add("fade-in");
     setFadeOut(true);
     setIsLoading(true);
+    console.log("loading is true")
 
     setTimeout(async () => {
       if (videoRef.current && canvasRef.current) {
@@ -91,7 +92,7 @@ const Page: React.FC = () => {
 
       const data = await response.json();
       if (data.success) {
-        console.log(data.num);
+        console.log(data.num); 
         await sendToFindInfoAPI(data.num);
       } else {
         console.error("Failed to interpret barcode:", data.failedReason);
@@ -115,7 +116,8 @@ const Page: React.FC = () => {
 
       const data = await response.json();
       if (data.success) {
-        setBrand(data.answer);
+        const brand = data.answer;
+        console.log(data);
         setTitle(data.title);
         await fetchAlt(data.title);
         await fetchBrandSummary(data.answer);
@@ -200,10 +202,16 @@ const Page: React.FC = () => {
   };
 
   useEffect(() => {
-    if (grade && !isSlotMachineActive) {
+    if (grade ) {
       setIsLoading(false);
+      console.log("loading is false")
       startSlotMachineEffect();
     }
+    // if (grade && !isSlotMachineActive) {
+    //   setIsLoading(false);
+    //   console.log("loading is false")
+    //   startSlotMachineEffect();
+    // }
   }, [grade]);
 
   return (
@@ -237,6 +245,13 @@ const Page: React.FC = () => {
             {brand && <h1 className="brand-name">{brand}</h1>}
             {title && <h2 className="product-title">{title}</h2>}
           </div>
+
+          <div className="info-overlay">
+            <div className="sustainability-grade">
+              <h3>Grade</h3>
+              <p>{sustainabilityGrade}</p>
+            </div>
+          </div>
         </>
       )}
 
@@ -251,20 +266,27 @@ const Page: React.FC = () => {
         />
       )}
 
-      <section id="projects" className="section invisible">
-        <section className="section news">
-          <h2 className="section__title">Report</h2>
-          <div className="hep">
-            <h4 className="hep__description">{summary1}</h4>
+      <section id="projects" class="section invisible">
+      {summary1 && (
+        <section id= "projects" class="section news">
+        <h2 class="section__title">News</h2>
+        <div class="hep">
+            <h4 class="hep__description">
+              {summary1}
+            </h4>
           </div>
-          <div className="hep">
-            <h4 className="hep__description">{summary2}</h4>
+          <div class="hep">
+            <h4 class="hep__description">
+              {summary2}
+            </h4>
           </div>
-          <div className="hep">
-            <h4 className="hep__description">{summary3}</h4>
+          <div class="hep">
+            <h4 class="hep__description">
+              {summary3}
+            </h4>
           </div>
         </section>
-
+      )}
         <div className="projects__grid">
           <div className="project">
             <h3>Assigned grade:</h3>

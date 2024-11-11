@@ -1,47 +1,20 @@
-/* Global Styles */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --background: #1e1e1e;
   --foreground: #ffffff;
-  --accent-color: #e4e2dd;
-  --font-family: "Poppins", sans-serif;
-  --line-height: 1.5;
-  --clr-bg-alt: #1e1e1e;
-  --clr-fg-alt: #1e1e1e;
-  --clr-primary: #e4e2dd;
-  --shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
-    rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+  --accent-color: #e4e2dd; /* Customize button color */
+  --font-geist-sans: Arial, Helvetica, sans-serif;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-family);
-  line-height: var(--line-height);
-}
-
-/* Selection Styles */
-::selection {
-  background: var(--clr-primary);
-  color: var(--background);
-}
-
-/* Typography */
 h1,
 h2,
 h3,
 h4 {
   line-height: 1.2;
-  color: #1e1e1e;
+  color: var(--clr-fg-alt);
 }
 
 h2 {
@@ -54,10 +27,9 @@ h3 {
 
 p {
   font-size: 1.2rem;
-  color: #1e1e1e;
+  color: #e4e2dd;
   margin-top: 8px;
   margin-bottom: 24px;
-  padding-top: 5px;
   text-align: center;
 }
 
@@ -66,12 +38,32 @@ ul {
   list-style-type: none;
 }
 
-/* Remove text decoration from links */
 a {
   text-decoration: none;
 }
 
-/* Page Container */
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans);
+}
+
+/* Main Page Container */
+.main-page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+  padding: 20px;
+}
+
 .page-container {
   display: flex;
   flex-direction: column;
@@ -82,9 +74,17 @@ a {
   padding: 20px;
 }
 
-/* Start and Capture Buttons */
-.start-button,
-.capture-button {
+/* Instructions */
+.instructions {
+  font-size: 1.2rem;
+  color: #cccccc;
+  margin-top: 8px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+/* Capture Button */
+.start-button, .capture-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -102,12 +102,28 @@ a {
   margin-top: 50px;
 }
 
-.start-button:hover,
-.capture-button:hover {
-  background-color: #ffffff;
+.start-button:hover, .capture-button:hover {
+  background-color: #FFFFFF;
 }
 
-/* Video Wrapper */
+/* Company Name Styling - Big and Centered */
+.company-name {
+  font-size: 4rem;
+  font-weight: bold;
+  color: #ffffff;
+  text-align: center;
+  display: none; /* Initially hidden */
+  position: absolute;
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%);
+}
+
+.company-name.visible {
+  display: block; /* Show when camera fades out */
+}
+
+/* Video Wrapper - Centering the Camera */
 .video-wrapper {
   padding-top: 50px;
   display: flex;
@@ -127,13 +143,18 @@ a {
   opacity: 0;
 }
 
+.fade-in {
+  margin-top: 5em;
+  opacity: 1;
+}
+
 .video {
   width: 100%;
   height: auto;
   border-radius: 10px;
 }
 
-/* Information Overlay */
+/* Full-Screen Information Overlay */
 .info-overlay {
   position: fixed;
   top: 0;
@@ -143,7 +164,7 @@ a {
   pointer-events: none;
 }
 
-/* Sustainability Grade */
+/* Sustainability Grade (Top Left) */
 .sustainability-grade {
   display: inline-block;
   border-radius: 12px;
@@ -157,7 +178,7 @@ a {
   margin: 0;
 }
 
-/* Brand Information */
+/* Brand and Title Display - Wrapping */
 .brand-info {
   display: flex;
   flex-direction: column;
@@ -189,37 +210,6 @@ a {
   font-weight: bold;
 }
 
-/* Projects Section */
-.section {
-  margin-top: 5em;
-  transition: opacity 1s ease-in-out;
-  border-radius: 10px;
-  transition-delay: 5s;
-}
-
-.section__title {
-  text-align: center;
-  margin-bottom: 1em;
-  text-transform: uppercase;
-}
-
-/* Topmost Box */
-.hep {
-  max-width: 1100px;
-  margin: 0 auto;
-  width: 100%;
-  padding: 2em;
-  text-align: center;
-  border-radius: 10px;
-  box-shadow: var(--shadow);
-  transition: transform 0.2s linear;
-}
-
-.hep:hover {
-  transform: translateY(-7px);
-}
-
-/* Projects Grid */
 .projects__grid {
   max-width: 1100px;
   margin: 0 auto;
@@ -233,25 +223,24 @@ a {
   text-align: center;
   border-radius: 10px;
   transition: transform 0.2s linear;
-  background-color: #e4e2dd;
+  background-color:#e4e2dd;
   margin-top: auto;
   margin-bottom: auto;
   margin-left: auto;
   width: 20em;
-  /* Removed fixed height to allow content to adjust */
+  height: 25em;
 }
 
 .news {
   padding: 2em;
   text-align: center;
-  border-radius: 10px;
   transition: transform 0.2s linear;
-  background-color: #e4e2dd;
+  background-color:#e4e2dd;
   margin-top: auto;
   margin-bottom: 2em;
   margin-left: auto;
   width: 65em;
-  height: auto;
+  height: 30em;
 }
 
 .project:hover {
@@ -293,8 +282,10 @@ a {
   padding-top: 3em;
 }
 
-.invisible {
-  opacity: 0;
+.section {
+  margin-top: 5em;
+  transition: opacity 1s ease-in-out;
+  transition-delay: 7s;
 }
 
 .fade-in {
@@ -303,15 +294,10 @@ a {
   animation-fill-mode: forwards;
 }
 
-/* Fade Animations */
-@keyframes fadein {
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
+.section__title {
+  text-align: center;
+  margin-bottom: 1em;
+  text-transform: uppercase;
 }
 
 @keyframes fadeout {
@@ -322,6 +308,12 @@ a {
   100% {
     opacity: 0;
   }
+}
+
+.fade-in {
+  opacity: 1;
+  pointer-events: auto;
+  animation-fill-mode: forwards;
 }
 
 .fade-out {
