@@ -54,9 +54,10 @@ h3 {
 
 p {
   font-size: 1.2rem;
-  color: #e4e2dd;
+  color: #1e1e1e;
   margin-top: 8px;
   margin-bottom: 24px;
+  padding-top: 5px;
   text-align: center;
 }
 
@@ -144,16 +145,16 @@ a {
 
 /* Sustainability Grade */
 .sustainability-grade {
-  position: absolute;
-  top: 60px;
-  left: 60px;
-  padding: 20px;
+  display: inline-block;
   border-radius: 12px;
-  color: #fff;
+  color: #1e1e1e;
   font-weight: bold;
   text-align: center;
-  font-size: 4rem;
-  width: 150px;
+  font-size: 4rem; /* Adjusted font size */
+}
+
+.sustainability-grade p {
+  margin: 0;
 }
 
 /* Brand Information */
@@ -178,6 +179,14 @@ a {
   font-weight: normal;
   color: #cccccc;
   margin-top: 8px;
+}
+
+.bodytext {
+  padding-top: 1.5em;
+  font-size: 0.8rem;
+  font-weight: normal;
+  color: #1e1e1e;
+  font-weight: bold;
 }
 
 /* Projects Section */
@@ -224,12 +233,12 @@ a {
   text-align: center;
   border-radius: 10px;
   transition: transform 0.2s linear;
-  background-color:#e4e2dd;
+  background-color: #e4e2dd;
   margin-top: auto;
   margin-bottom: auto;
   margin-left: auto;
   width: 20em;
-  height: 25em;
+  /* Removed fixed height to allow content to adjust */
 }
 
 .news {
@@ -237,12 +246,12 @@ a {
   text-align: center;
   border-radius: 10px;
   transition: transform 0.2s linear;
-  background-color:#e4e2dd;
+  background-color: #e4e2dd;
   margin-top: auto;
   margin-bottom: 2em;
   margin-left: auto;
   width: 65em;
-  height: 30em;
+  height: auto;
 }
 
 .project:hover {
@@ -271,8 +280,27 @@ a {
   margin-left: 0.5em;
 }
 
+.altpic {
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 1em;
+  border-radius: 10px;
+  max-height: 15em;
+  max-width: 15em;
+}
+
+.ecoalt {
+  padding-top: 3em;
+}
+
 .invisible {
   opacity: 0;
+}
+
+.fade-in {
+  opacity: 1;
+  pointer-events: auto;
+  animation-fill-mode: forwards;
 }
 
 /* Fade Animations */
@@ -294,12 +322,6 @@ a {
   100% {
     opacity: 0;
   }
-}
-
-.fade-in {
-  opacity: 1;
-  pointer-events: auto;
-  animation-fill-mode: forwards;
 }
 
 .fade-out {
